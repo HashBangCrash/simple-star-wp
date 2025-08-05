@@ -1,0 +1,11 @@
+.fsr-rating {
+  display: inline-flex;
+  gap: 2px;
+  vertical-align: middle;
+}
+
+.fsr-star {
+  display: inline-block;
+}
+
+/*# sourceMappingURL=style.css.map */
