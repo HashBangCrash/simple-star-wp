@@ -24,13 +24,16 @@ Use the shortcode `[five-star-rating]` anywhere in your posts or pages.
 
 ### Shortcode Parameters
 
-| Parameter      | Type    | Required | Default | Description                                                                |
-|----------------|---------|----------|---------|----------------------------------------------------------------------------|
-| `rating`       | decimal | No       | 0       | The star rating between 0 and 5 (supports quarters, e.g., 3.75).           |
-| `color`        | string  | No       | gold    | Star fill color — accepts named colors or hex codes (e.g., `gold`, `#FFD700`). |
-| `size`         | integer | No       | 24      | Star size in pixels.                                                        |
-| `label_before` | string  | No       | ""      | Text displayed immediately before the stars.                              |
-| `label_after`  | string  | No       | ""      | Text displayed immediately after the stars.                               |
+| Parameter               | Type    | Required | Default | Description                                                                |
+|-------------------------|---------|----------|---------|----------------------------------------------------------------------------|
+| `rating`                | decimal | No       | 0       | The star rating between 0 and 5 (supports quarters, e.g., 3.75).           |
+| `color`                 | string  | No       | gold    | Star fill color — accepts named colors or hex codes (e.g., `gold`, `#FFD700`). |
+| `size`                  | integer | No       | 24      | Star size in pixels.                                                        |
+| `label_before`          | string  | No       | ""      | Text displayed immediately before the stars.                              |
+| `label_after`           | string  | No       | ""      | Text displayed immediately after the stars.                               |
+| `label_font_size`       | integer | No       | 24      | Font size (px) for both before and after labels. |
+| `label_before_font_size`| integer | No       | 24      | Advanced: font size (px) for before label only (overrides `label_font_size`). |
+| `label_after_font_size` | integer | No       | 24      | Advanced: font size (px) for after label only (overrides `label_font_size`). |
 
 ---
 

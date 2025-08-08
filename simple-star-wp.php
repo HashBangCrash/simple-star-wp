@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Simple Star WP
  * Description: A simple WordPress block and shortcode to render a 5-star rating system.
- * Version: 1.0
+ * Version: 1.1.0
  * Author: Stephen Schrauger
  * Plugin URI: https://github.com/HashBangCrash/simple-star-wp
  * Github Plugin URI: HashBangCrash/simple-star-wp
@@ -34,22 +34,30 @@ function fsr_shortcode( $atts ) {
         'size'         => 24,
         'label_before' => '',
         'label_after'  => '',
+        'label_font_size' => '',
+        'label_before_font_size' => '',
+        'label_after_font_size' => '',
     ], $atts );
+
+    // Apply font size logic
+    $before_font_size = esc_attr($atts['label_before_font_size'] ? $atts['label_before_font_size']: $atts['label_font_size']);
+    $after_font_size  = esc_attr($atts['label_after_font_size'] ? $atts['label_after_font_size'] : $atts['label_font_size']);
 
     $rating       = floatval( $atts['rating'] );
     $rating       = max( 0, min( 5, round( $rating * 4 ) / 4 ) );
     $color        = sanitize_hex_color( $atts['color'] ) ?: $atts['color'];
     $size         = intval( $atts['size'] );
+    $s_size       = esc_attr($size);
     $label_before = sanitize_text_field( $atts['label_before'] );
     $label_after  = sanitize_text_field( $atts['label_after'] );
 
     $output = '<div class="fsr-rating-wrapper">';
 
     if ( $label_before ) {
-        $output .= '<span class="fsr-label-before">' . esc_html( $label_before ) . '</span> ';
+        $output .= "<span class='fsr-label-before' style='font-size: ${before_font_size}px' >${label_before}</span> ";
     }
 
-    $output .= '<div class="fsr-rating" style="--fsr-color: ' . esc_attr( $color ) . '; --fsr-size: ' . esc_attr( $size ) . 'px;" aria-label="Rating: ' . esc_attr( $rating ) . ' out of 5">';
+    $output .= "<div class='fsr-rating' style='--fsr-color: ${color}; --fsr-size: ${s_size}px;' aria-label='Rating: ${rating} out of 5'>";
 
     for ( $i = 1; $i <= 5; $i++ ) {
         $diff = $rating - ( $i - 1 );
@@ -66,7 +74,7 @@ function fsr_shortcode( $atts ) {
     $output .= '</div>';
 
     if ( $label_after ) {
-        $output .= ' <span class="fsr-label-after">' . esc_html( $label_after ) . '</span>';
+        $output .= " <span class='fsr-label-after' style='font-size: ${after_font_size}px' >${label_after}</span>";
     }
 
     $output .= '</div>';
@@ -78,21 +86,23 @@ function fsr_shortcode( $atts ) {
 function fsr_svg_star( $fill_pct, $color, $size ) {
     $clip_width = round($fill_pct / 100 * 24); // 24 is viewBox width
     $id = uniqid('fsr-');
+    $s_color = esc_attr($color);
+    $s_size = esc_attr($size);
 
-    return '
-    <svg class="fsr-star" width="' . $size . '" height="' . $size . '" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="star">
+    return "
+    <svg class='fsr-star' width=${s_size} height=${s_size} viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg' role='img' aria-label='star'>
         <defs>
-            <clipPath id="' . $id . '">
-                <rect x="0" y="0" width="' . $clip_width . '" height="24" />
+            <clipPath id=${id}>
+                <rect x='0' y='0' width='${clip_width}' height='24' />
             </clipPath>
         </defs>
         <!-- Background (empty star) -->
-        <polygon fill="white" stroke="black" stroke-width="1"
-            points="12,2 15,9 22,9 17,14 19,21 12,17 5,21 7,14 2,9 9,9" />
+        <polygon fill='white' stroke='black' stroke-width='1'
+            points='12,2 15,9 22,9 17,14 19,21 12,17 5,21 7,14 2,9 9,9' />
         <!-- Foreground (filled star) -->
-        <polygon fill="' . esc_attr($color) . '" stroke="black" stroke-width="1" clip-path="url(#' . $id . ')" 
-            points="12,2 15,9 22,9 17,14 19,21 12,17 5,21 7,14 2,9 9,9" />
-    </svg>';
+        <polygon fill='${s_color}' stroke='black' stroke-width='1' clip-path='url(#${id})' 
+            points='12,2 15,9 22,9 17,14 19,21 12,17 5,21 7,14 2,9 9,9' />
+    </svg>";
 }
 
 
@@ -117,9 +127,13 @@ function fsr_register_block() {
             'size'         => ['type' => 'number', 'default' => 24],
             'label_before' => ['type' => 'string', 'default' => ''],
             'label_after'  => ['type' => 'string', 'default' => ''],
+            'label_font_size'=> [ 'type' => 'number',  'default' => 24 ],
+            'label_before_font_size'=> [ 'type' => ['number', 'null'], 'default' => null ],
+            'label_after_font_size' => [ 'type' => ['number', 'null'], 'default' => null ],
+            'advanced_font_size'    => [ 'type' => 'boolean', 'default' => false ],
         ],
-    ] );
-
+    ]
+    );
 }
 
 add_action( 'init', __NAMESPACE__ . '\\fsr_register_block' );
