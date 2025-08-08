@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Simple Star WP
  * Description: A simple WordPress block and shortcode to render a 5-star rating system.
- * Version: 1.1.0
+ * Version: 1.1.1
  * Author: Stephen Schrauger
  * Plugin URI: https://github.com/HashBangCrash/simple-star-wp
  * Github Plugin URI: HashBangCrash/simple-star-wp
@@ -48,8 +48,8 @@ function fsr_shortcode( $atts ) {
     $color        = sanitize_hex_color( $atts['color'] ) ?: $atts['color'];
     $size         = intval( $atts['size'] );
     $s_size       = esc_attr($size);
-    $label_before = sanitize_text_field( $atts['label_before'] );
-    $label_after  = sanitize_text_field( $atts['label_after'] );
+    $label_before = esc_html( $atts['label_before'] );
+    $label_after  = esc_html( $atts['label_after'] );
 
     $output = '<div class="fsr-rating-wrapper">';
 
